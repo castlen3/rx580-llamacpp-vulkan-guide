@@ -1,14 +1,23 @@
-# RX 580 + llama.cpp Vulkan 完整指南 / Complete Guide
+<p align="center">
+  <a href="#-chinese"><img src="https://img.shields.io/badge/中文-Chinese-red?style=for-the-badge" alt="中文"></a>
+  &nbsp;
+  <a href="#-english"><img src="https://img.shields.io/badge/English-English-blue?style=for-the-badge" alt="English"></a>
+</p>
+
+---
 
 > **TL;DR**: 一張淘寶買的「號稱非礦卡」RX 580 2048SP 老 A 卡，靠一個環境變數 `GGML_VK_ALLOW_GRAPHICS_QUEUE=1` 就能跑 **35B MoE 大模型**，達到 16.3 t/s（GTX 1070 CUDA 的 73%）。
 >
 > A "definitely-not-a-mining-card" RX 580 2048SP bought from Taobao, rescued by one environment variable — and it runs **35B MoE models** at 16.3 t/s (73% of GTX 1070 CUDA performance).
 
-[中文](#中文) | [English](#english)
-
 ---
 
-# 中文
+# 🇹🇼 Chinese
+
+<details open>
+<summary><b>📖 點擊展開/收合中文完整內容</b></summary>
+
+---
 
 ## 故事：一張來自淘寶的「遊戲卡」
 
@@ -128,7 +137,6 @@ RX 580 Vulkan 達到 GTX 1070 CUDA 的 **73%**。作為參考，這張 GTX 1070 
 ### 1. 下載 llama.cpp Vulkan build
 
 ```bash
-# Git Bash
 cd ~
 curl -L -o llama-vulkan.zip \
   https://github.com/ggml-org/llama.cpp/releases/download/b9519/llama-b9519-bin-win-vulkan-x64.zip
@@ -147,9 +155,7 @@ unzip -o llama-vulkan.zip -d ~/llama-vulkan
 ```bash
 GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-cli.exe \
   -m Qwen3-1.7B-Q6_K.gguf \
-  -ngl 99 \
-  -t 10 \
-  -c 4096 \
+  -ngl 99 -t 10 -c 4096 \
   --device Vulkan0
 ```
 
@@ -158,15 +164,9 @@ GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-cli.exe \
 ```bash
 GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-cli.exe \
   -m Qwen3.6-35B-A3B-Q4_K_M.gguf \
-  -ngl 99 \
-  -t 4 \
-  -c 32768 \
-  -fa on \
-  --cache-type-k q8_0 \
-  --cache-type-v q8_0 \
-  -fit off \
-  --no-mmap \
-  --n-cpu-moe 30 \
+  -ngl 99 -t 4 -c 32768 -fa on \
+  --cache-type-k q8_0 --cache-type-v q8_0 \
+  -fit off --no-mmap --n-cpu-moe 30 \
   --device Vulkan0
 ```
 
@@ -175,17 +175,10 @@ GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-cli.exe \
 ```bash
 GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-server.exe \
   -m Qwen3.6-35B-A3B-Q4_K_M.gguf \
-  -ngl 99 \
-  -t 4 \
-  -c 32768 \
-  -fa on \
-  --cache-type-k q8_0 \
-  --cache-type-v q8_0 \
-  -fit off \
-  --no-mmap \
-  --n-cpu-moe 30 \
-  --device Vulkan0 \
-  --port 8080
+  -ngl 99 -t 4 -c 32768 -fa on \
+  --cache-type-k q8_0 --cache-type-v q8_0 \
+  -fit off --no-mmap --n-cpu-moe 30 \
+  --device Vulkan0 --port 8080
 ```
 
 ## 已知限制
@@ -208,9 +201,18 @@ GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-server.exe \
 | Driver Vulkan API | 1.3.260 |
 | llama.cpp | b9519 (2026-06-05) |
 
+<p align="right"><a href="#-english">🔽 跳到英文版 / Jump to English</a></p>
+
+</details>
+
 ---
 
-# English
+# 🇺🇸 English
+
+<details>
+<summary><b>📖 Click to expand English version</b></summary>
+
+---
 
 ## Story: A "Gaming Card" from Taobao
 
@@ -330,7 +332,6 @@ Tested: RX 580 can use up to **6.6 GB / 7.4 GB (89%)** — not the "only 4 GB" m
 ### 1. Download llama.cpp Vulkan Build
 
 ```bash
-# Git Bash
 cd ~
 curl -L -o llama-vulkan.zip \
   https://github.com/ggml-org/llama.cpp/releases/download/b9519/llama-b9519-bin-win-vulkan-x64.zip
@@ -349,9 +350,7 @@ unzip -o llama-vulkan.zip -d ~/llama-vulkan
 ```bash
 GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-cli.exe \
   -m Qwen3-1.7B-Q6_K.gguf \
-  -ngl 99 \
-  -t 10 \
-  -c 4096 \
+  -ngl 99 -t 10 -c 4096 \
   --device Vulkan0
 ```
 
@@ -360,15 +359,9 @@ GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-cli.exe \
 ```bash
 GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-cli.exe \
   -m Qwen3.6-35B-A3B-Q4_K_M.gguf \
-  -ngl 99 \
-  -t 4 \
-  -c 32768 \
-  -fa on \
-  --cache-type-k q8_0 \
-  --cache-type-v q8_0 \
-  -fit off \
-  --no-mmap \
-  --n-cpu-moe 30 \
+  -ngl 99 -t 4 -c 32768 -fa on \
+  --cache-type-k q8_0 --cache-type-v q8_0 \
+  -fit off --no-mmap --n-cpu-moe 30 \
   --device Vulkan0
 ```
 
@@ -377,17 +370,10 @@ GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-cli.exe \
 ```bash
 GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-server.exe \
   -m Qwen3.6-35B-A3B-Q4_K_M.gguf \
-  -ngl 99 \
-  -t 4 \
-  -c 32768 \
-  -fa on \
-  --cache-type-k q8_0 \
-  --cache-type-v q8_0 \
-  -fit off \
-  --no-mmap \
-  --n-cpu-moe 30 \
-  --device Vulkan0 \
-  --port 8080
+  -ngl 99 -t 4 -c 32768 -fa on \
+  --cache-type-k q8_0 --cache-type-v q8_0 \
+  -fit off --no-mmap --n-cpu-moe 30 \
+  --device Vulkan0 --port 8080
 ```
 
 ## Known Limitations
@@ -409,6 +395,12 @@ GGML_VK_ALLOW_GRAPHICS_QUEUE=1 ./llama-server.exe \
 | Driver | AMD Adrenalin 26.5.2 |
 | Driver Vulkan API | 1.3.260 |
 | llama.cpp | b9519 (2026-06-05) |
+
+<p align="right"><a href="#-chinese">🔼 跳到中文版 / Jump to Chinese</a></p>
+
+</details>
+
+---
 
 ## 相關專案 / Related Projects
 
