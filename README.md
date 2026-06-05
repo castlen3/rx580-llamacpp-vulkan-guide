@@ -122,6 +122,20 @@ RX 580 Vulkan 達到 GTX 1070 CUDA 的 **73%**。作為參考，這張 GTX 1070 
 | `--no-mmap` | — | 避免 mmap overhead |
 | `-c` | `32768` | 最大 context（需配 q8_0 cache） |
 
+### `-tb` 調校實測
+
+在 RX 580 2048SP + Qwen3.6-35B-A3B hybrid offload（`--n-cpu-moe 30`）設定下，
+測試了 `-tb`（`n_threads_batch`）從 4 提升到 8 和 12 的效果：
+
+| `-tb` | Prefill | Decode | 結論 |
+|-------|---------|--------|------|
+| 4（預設，同 `-t`） | ~78 tok/s | ~14 tok/s | 基準 |
+| 8 | ~79 tok/s | ~15 tok/s | 無實質改善 |
+| 12 | ~80 tok/s | ~14 tok/s | 無實質改善 |
+
+**結論：prefill 瓶頸不在 CPU batch threads。**提升 `-tb` 對 throughput 無幫助。
+建議維持原始 `-t 4`，**不額外設定 `-tb`**。
+
 ## 實測可跑模型
 
 | 模型 | 量化 | 大小 | 可用 | Generation |
@@ -316,6 +330,20 @@ Tested: RX 580 can use up to **6.6 GB / 7.4 GB (89%)** — not the "only 4 GB" m
 | `-fit` | `off` | Prevent auto-tuning |
 | `--no-mmap` | — | Avoid mmap overhead |
 | `-c` | `32768` | Max context (requires q8_0 cache) |
+
+### `-tb` Thread Tuning
+
+Under RX 580 2048SP + Qwen3.6-35B-A3B hybrid offload (`--n-cpu-moe 30`),
+we tested `-tb` (`n_threads_batch`) at 8 and 12 vs the default of 4:
+
+| `-tb` | Prefill | Decode | Verdict |
+|-------|---------|--------|---------|
+| 4 (default, same as `-t`) | ~78 tok/s | ~14 tok/s | Baseline |
+| 8 | ~79 tok/s | ~15 tok/s | No improvement |
+| 12 | ~80 tok/s | ~14 tok/s | No improvement |
+
+**Conclusion: the prefill bottleneck is NOT in CPU batch threads.** Raising `-tb` provides
+no meaningful throughput gain. Keep the original `-t 4` — **do not set `-tb` separately**.
 
 ## Tested Models
 
